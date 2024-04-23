@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="estilos.css">
+    <title>Mi Página de Productos</title>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <a href=""></a>
+            <a href=""></a>
+            <a href=""></a>
+        </ul>
+    </nav>
+</header>
+    <h1>Lista de Productos</h1>
+    <form id="productForm">
+        <label for="productName">Nombre del Producto:</label>
+        <input type="text" id="productName" name="productName" required>
+        <br>
+        <label for="productQuantity">Cantidad del producto:</label>
+        <input type="number" id="productQuantity" name="productQuantity" required>
+        <br>
+        <label for="productPrice">Precio del Producto:</label>
+        <input type="number" id="productPrice" name="productPrice" required>
+        <br>
+        <input type="button" value="Agregar Producto" onclick="agregarProducto()">
+    </form>
+    <h2>Productos Agregados:</h2>
+    <ul id="productList"></ul>
+    <h2>Precio Total:</h2>
+    <p id="totalPrice">0</p>
+    <h2>Fecha:</h2>
+    <p id="currentDate"></p>
+
+    <script>
+        // Variables para almacenar productos y precio total
+        let productos = [];
+        let precioTotal = 0;
+
+        function agregarProducto() {
+    // ... Código previo ...
+
+    // Agrega el producto a la base de datos
+    const transaction = db.transaction(['productos'], 'readwrite');
+    const objectStore = transaction.objectStore('productos');
+    const request = objectStore.add({ nombre: productName, cantidad: productQuantity, precio: productPrice });
+
+    request.onsuccess = function (event) {
+        console.log('Producto agregado a la base de datos.');
+    };
+
+    request.onerror = function (event) {
+        console.error('Error al agregar el producto a la base de datos:', event.target.errorCode);
+    };
+
+   
+
+
+            // Agrega el producto a la lista
+            productos.push({
+                nombre: productName,
+                cantidad: productQuantity,
+                precio: productPrice
+            });
+
+            // Actualiza la lista de productos en la página
+            const productList = document.getElementById("productList");
+            const listItem = document.createElement("li");
+            listItem.textContent = `${productName} (Cantidad: ${productQuantity}): $${(productQuantity * productPrice).toFixed(2)}`;
+            productList.appendChild(listItem);
+
+            // Actualiza el precio total
+            precioTotal += productQuantity * productPrice;
+            document.getElementById("totalPrice").textContent = `$${precioTotal.toFixed(2)}`;
+
+            // Limpia los campos del formulario
+            document.getElementById("productName").value = "";
+            document.getElementById("productQuantity").value = "";
+            document.getElementById("productPrice").value = "";
+
+            // Enfoca automáticamente el campo de nombre del producto
+            document.getElementById("productName").focus();
+        }
+
+        // Agrega la funcionalidad para mover el enfoque al siguiente campo al presionar "Enter"
+        document.getElementById("productName").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                document.getElementById("productQuantity").focus();
+            }
+        });
+
+        document.getElementById("productQuantity").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                document.getElementById("productPrice").focus();
+            }
+        });
+
+        document.getElementById("productPrice").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                agregarProducto();
+            }
+        });
+
+        // Muestra la fecha actual al cargar la página
+        window.onload = function () {
+            const currentDate = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = currentDate.toLocaleDateString('es-AR', options);
+            document.getElementById("currentDate").textContent = `Hoy ${formattedDate}`;
+        }
+    </script>
+
+<!-- ... Tu código HTML actual ... -->
+
+<script>
+    // Código para la conexión con la base de datos
+    const request = indexedDB.open('miBaseDeDatos', 1);
+
+    request.onupgradeneeded = function (event) {
+        const db = event.target.result;
+        const objectStore = db.createObjectStore('productos', { keyPath: 'id', autoIncrement: true });
+        objectStore.createIndex('nombre', 'nombre', { unique: false });
+        objectStore.createIndex('cantidad', 'cantidad', { unique: false });
+        objectStore.createIndex('precio', 'precio', { unique: false });
+    };
+
+    request.onerror = function (event) {
+        console.error('Error al abrir la base de datos:', event.target.errorCode);
+    };
+
+    request.onsuccess = function (event) {
+        const db = event.target.result;
+
+        // ... Aquí puedes realizar operaciones con la base de datos ...
+
+        window.onload = function () {
+            // ... Tu código onload actual ...
+        };
+    };
+</script>
+</body>
+</html>
+
+
+    <a href="pagina.html">volver a la pagina principal</a>
+</body>
+</html>

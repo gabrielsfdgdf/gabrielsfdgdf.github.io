@@ -1,0 +1,12 @@
+body {
+    background-image: url(rem2.jfif);
+background-size: cover;
+background-repeat: no-repeat;
+font-family: "lobster", cursive;
+}
+
+footer {
+    background-color: darkblue;
+    padding-bottom: 70px;
+
+}

@@ -1,0 +1,151 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="estilos.css">
+    <title>Página de Productos</title>
+    <link rel="icon" href="marin.jpg">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <p><a href="historial.html">historial</a></p>
+                <p><a href="pruebas.html">otras</a></p>
+                <a href=""></a>
+            </ul>
+        </nav>
+    </header>
+    <h1>Lista de Productos</h1>
+
+    <h3>con esta página podrá hacer...</h3>
+
+    <ol>
+        <li>anotar los productos</li>
+        <li>anotar la cantidad del producto</li>
+        <li>anotar el precio del producto</li>
+        <li>sumar los productos de acuerdo a la cantidad del producto</li>
+    </ol>
+
+    <form id="productForm">
+        <label for="productName">Nombre del Producto:</label>
+        <input type="text" id="productName" name="productName" required>
+        <br>
+        <label for="productQuantity">Cantidad del producto:</label>
+        <input type="number" id="productQuantity" name="productQuantity" required>
+        <br>
+        <label for="productPrice">Precio del Producto:</label>
+        <input type="number" id="productPrice" name="productPrice" required>
+        <br>
+        <input type="button" value="Agregar Producto" onclick="agregarProducto()">
+    </form>
+    <h2>Productos Agregados:</h2>
+    <ul id="productList"></ul>
+    <h2>Precio Total:</h2>
+    <p id="totalPrice">0</p>
+    <h2>Fecha:</h2>
+    <p id="currentDate"></p>
+
+    <script>
+        // Variables para almacenar productos y precio total
+        let productos = [];
+        let precioTotal = 0;
+
+        // Función para agregar un producto
+        function agregarProducto() {
+            const productName = document.getElementById("productName").value;
+            const productQuantity = parseInt(document.getElementById("productQuantity").value);
+            const productPrice = parseFloat(document.getElementById("productPrice").value);
+
+            // Verifica que se ingresaron valores válidos
+            if (
+                productName.trim() === "" ||
+                isNaN(productQuantity) || productQuantity <= 0 ||
+                isNaN(productPrice) || productPrice <= 0
+            ) {
+                alert("Por favor, ingrese valores válidos en todos los campos.");
+                return;
+            }
+
+            // Agrega el producto a la lista
+            productos.push({
+                nombre: productName,
+                cantidad: productQuantity,
+                precio: productPrice
+            });
+
+            // Actualiza la lista de productos en la página
+            const productList = document.getElementById("productList");
+            const listItem = document.createElement("li");
+            listItem.textContent = `${productName} (Cantidad: ${productQuantity}): $${(productQuantity * productPrice).toFixed(2)}`;
+            productList.appendChild(listItem);
+
+            // Actualiza el precio total
+            precioTotal += productQuantity * productPrice;
+            document.getElementById("totalPrice").textContent = `$${precioTotal.toFixed(2)}`;
+
+            // Limpia los campos del formulario
+            document.getElementById("productName").value = "";
+            document.getElementById("productQuantity").value = "";
+            document.getElementById("productPrice").value = "";
+
+            // Enfoca automáticamente el campo de nombre del producto
+            document.getElementById("productName").focus();
+        }
+
+        // Agrega la funcionalidad para mover el enfoque al siguiente campo al presionar "Enter"
+        document.getElementById("productName").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                document.getElementById("productQuantity").focus();
+            }
+        });
+
+        document.getElementById("productQuantity").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                document.getElementById("productPrice").focus();
+            }
+        });
+
+        document.getElementById("productPrice").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                agregarProducto();
+            }
+        });
+    </script>
+     <div>
+     <h2>
+         lalalalallala
+     </h2>
+
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum quaerat eum nobis 
+            quam distinctio aliquid laudantium amet, doloribus autem quia libero, qui aliquam sint
+            consectetur! Autem sint ea minima dolore. Lorem ipsum dolor sit amet consectetur adipisicing
+             elit. Aliquid eveniet odio dignissimos. Nostrum, minima accusantium eum, cumque illo, 
+             voluptates unde rem id a corporis magni. Quam ex itaque dolorem inventore?
+             Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis consequuntur qui,
+              expedita, id, iste odio repellendus fugit voluptatibus obcaecati quae doloribus animi 
+              commodi delectus eum minus officia incidunt quibusdam dolorum! Lorem ipsum dolor sit
+               amet consectetur, adipisicing elit. Laborum, quia? Nemo, praesentium. Impedit, quibusdam 
+               maiores facilis odit quae fugiat consectetur deserunt quia totam iure, aspernatur saepe
+                corporis ab a minima.
+        </p>
+     </div>
+    <script>
+
+        // Muestra la fecha actual al cargar la página
+        window.onload = function () {
+            const currentDate = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = currentDate.toLocaleDateString('es-AR', options);
+            document.getElementById("currentDate").textContent = `Hoy ${formattedDate}`;
+        }
+    </script>
+    <a href="pruebas.html">otras</a>
+    <footer>
+        <h3><b>todos los derechos reservados</b></h3>
+    </footer>
+</body>
+</html>
+
+  
